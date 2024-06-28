@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -u
 
 LOG_TIMESTAMP_FORMAT="+%Y-%m-%d %H:%M:%S"
 
@@ -41,6 +41,14 @@ log_message() {
 log_message "Backing up system to ${BACKUP_FILENAME}"
 
 "${TAR_CMD[@]}"
+
+# tar will exit 1 if a fail changes while building the archive
+# this is ok for our purposes, but prevents simple error handling 
+tar_exit_code=$?
+if [[ "${tar_exit_code}" -ne 0 && "${tar_exit_code}" -ne 1 ]]; then
+    log_message "Error creating backup file at ${BACKUP_FILENAME}"
+    exit "${tar_exit_code}"
+fi
 
 log_message "Successfully backed up system to ${BACKUP_FILENAME}"
 
