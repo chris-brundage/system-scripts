@@ -8,6 +8,7 @@ BACKUP_FILENAME="system-backup-$(date +%Y-%m-%dT%H:%M:%S).tar.gz"
 BACKUP_FILENAME="${BACKUP_PATH}/${BACKUP_FILENAME}"
 
 TAR_EXCLUDES=(
+    "/boot/*"
     "/tmp/*" 
     "/media/*"
     "/mnt/*"
@@ -27,9 +28,14 @@ TAR_EXCLUDES=(
     "/var/lock/*"
     "/var/run/*"
     "/var/lib/docker/*"
+    "/var/lib/mysql/*"
     "/var/lib/pterodactyl/*"
+    "/var/tmp/*"
 )
 TAR_CMD=(tar --create --acls --selinux --xattrs --gzip)
+# Make tar output less spammy
+TAR_CMD+=(--warning=no-file-changed)
+TAR_CMD+=(--warning=no-file-ignored)
 TAR_CMD+=(--file "${BACKUP_FILENAME}")
 TAR_CMD+=("${TAR_EXCLUDES[@]/#/--exclude=}")
 TAR_CMD+=("/")
