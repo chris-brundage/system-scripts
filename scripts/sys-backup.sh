@@ -15,6 +15,7 @@ TAR_EXCLUDES=(
     "/home/*"
     "/backup/*"
     "/backup-old/*"
+    "/opt/games/*"
     "/dev/*"
     "/sys/*"
     "/proc/*"
@@ -60,4 +61,4 @@ log_message "Successfully backed up system to ${BACKUP_FILENAME}"
 
 log_message "Cleaning up backups older than 7 days from ${BACKUP_PATH}"
 
-find "${BACKUP_PATH}" -type f -name '*.tar.gz' -mtime +7 -print -delete
+find "${BACKUP_PATH}" -type f -name '*.tar.gz' -mtime +4 -print -delete
