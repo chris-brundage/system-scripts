@@ -13,10 +13,13 @@ done
 
 if [[ "${domain_updated}" -ne 1 ]]; then
     printf "Router cert %s was not updated. Exiting\n" "${CERT_DOMAIN_NAME}"
+    printf "Updated domains include: %s\n" "${RENEWED_DOMAINS:-}"
+    exit 0
 fi
 
 if [[ ! -d "${RENEWED_LINEAGE:-}" ]]; then
     printf "The Letsencrypt cert dir %s does not exist. Huh?\n" "${RENEWED_LINEAGE:-}"
+    exit 1
 fi
 
 SSH_IDENTITY_FILE="/root/.ssh/id_rsa_router"
